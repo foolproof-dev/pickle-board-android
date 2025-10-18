@@ -1,0 +1,123 @@
+:root {
+  --background-color: #1a1a1a;
+  --text-color: #f0f0f0;
+  --primary-color: #00a8ff;
+  --accent-color: #f7ff00; /* Neon Yellow */
+  --serving-glow: rgba(247, 255, 0, 0.6);
+  --card-bg: #2a2a2a;
+  --card-border: #444;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: 'Poppins', sans-serif;
+}
+
+.App {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.title {
+  font-family: 'Anton', sans-serif;
+  color: var(--accent-color);
+  font-size: 3rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.team-area {
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: 15px;
+  padding: 20px;
+  transition: all 0.3s ease-in-out;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.serving {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 25px var(--serving-glow);
+}
+
+.score-display {
+  font-family: 'Anton', sans-serif;
+  font-size: 7rem;
+  font-weight: normal;
+  line-height: 1;
+  color: var(--text-color);
+}
+
+.game-score {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #aaa;
+}
+
+.server-number {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  height: 2.5rem; /* 高さを確保 */
+  text-transform: uppercase;
+}
+
+.point-button {
+  width: 100%;
+  padding: 15px 0;
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 10px;
+  background-color: var(--primary-color);
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.point-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 168, 255, 0.4);
+}
+
+.team-name {
+  font-size: 2.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.team-name-input {
+  font-size: 2.5rem;
+  font-weight: 600;
+  border: none;
+  background-color: transparent;
+  text-align: center;
+  width: 100%;
+  color: var(--text-color);
+}
+
+.control-buttons button {
+  margin: 0 8px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+/* --- スマホ向けレイアウト --- */
+@media (max-width: 767.98px) {
+  .team-row {
+    flex-direction: column;
+  }
+  .team-area {
+    margin-bottom: 20px;
+  }
+  .score-display {
+    font-size: 6rem;
+  }
+  .team-name {
+    font-size: 2rem;
+  }
+}

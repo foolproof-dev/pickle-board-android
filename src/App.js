@@ -1,0 +1,235 @@
+import React, { useState, useEffect, useCallback } from 'react';
+
+// --- 定数 ---
+const INITIAL_SCORES = { teamA: 0, teamB: 0 };
+const WINNING_SCORE = 11;
+
+// --- メインコンポーネント ---
+function App() {
+  // --- 状態管理 ---
+  const [scores, setScores] = useState(INITIAL_SCORES);
+  const [gameScores, setGameScores] = useState(INITIAL_SCORES);
+  const [servingTeam, setServingTeam] = useState(null);
+  const [serverNumber, setServerNumber] = useState(1); // 内部ロジック用 (1 or 2)
+  const [isFirstServeOfGame, setIsFirstServeOfGame] = useState(true); // ゲーム最初のサーブか
+  const [winner, setWinner] = useState(null);
+  const [teamNames, setTeamNames] = useState({ teamA: 'Team A', teamB: 'Team B' });
+  const [editing, setEditing] = useState({ teamA: false, teamB: false });
+  const [history, setHistory] = useState([]);
+  const [gameState, setGameState] = useState('not_started'); // not_started, in_progress, finished
+
+  const checkWinner = useCallback(() => {
+    const { teamA, teamB } = scores;
+    if (teamA >= WINNING_SCORE && teamA >= teamB + 2) {
+      setWinner('teamA');
+      setGameScores(prev => ({ ...prev, teamA: prev.teamA + 1 }));
+      setGameState('finished');
+    } else if (teamB >= WINNING_SCORE && teamB >= teamA + 2) {
+      setWinner('teamB');
+      setGameScores(prev => ({ ...prev, teamB: prev.teamB + 1 }));
+      setGameState('finished');
+    }
+  }, [scores]);
+
+  // --- 副作用 ---
+  useEffect(() => {
+    if (gameState === 'in_progress') {
+      checkWinner();
+    }
+  }, [scores, checkWinner, gameState]);
+
+  // --- 主要ロジック ---
+  const handlePoint = (winningTeam) => {
+    if (gameState !== 'in_progress') return;
+
+    // 現在の状態を履歴に保存
+    setHistory(prevHistory => [...prevHistory, {
+      scores,
+      gameScores,
+      servingTeam,
+      serverNumber,
+      isFirstServeOfGame,
+      winner,
+      gameState,
+    }]);
+
+    if (winningTeam === servingTeam) {
+      // サーブ側がポイント
+      setScores(prev => ({ ...prev, [winningTeam]: prev[winningTeam] + 1 }));
+    } else {
+      // サーブ側がフォルト
+      if (isFirstServeOfGame) {
+        // ゲーム最初のサーブでのフォルトは即サイドアウト
+        setServingTeam(winningTeam);
+        setServerNumber(1);
+        setIsFirstServeOfGame(false); // 特別ルール終了
+      } else if (serverNumber === 1) {
+        // 通常時のサーバー1のフォルト
+        setServerNumber(2);
+      } else {
+        // 通常時のサーバー2のフォルトでサイドアウト
+        setServingTeam(winningTeam);
+        setServerNumber(1);
+      }
+    }
+  };
+
+  const handleSelectFirstServer = (team) => {
+    setServingTeam(team);
+    setGameState('in_progress');
+  };
+
+  // --- リセット・Undoロジック ---
+  const handleUndo = () => {
+    if (history.length === 0) return;
+
+    const lastState = history[history.length - 1];
+    setScores(lastState.scores);
+    setGameScores(lastState.gameScores);
+    setServingTeam(lastState.servingTeam);
+    setServerNumber(lastState.serverNumber);
+    setIsFirstServeOfGame(lastState.isFirstServeOfGame);
+    setWinner(lastState.winner);
+    setGameState(lastState.gameState);
+
+    setHistory(prevHistory => prevHistory.slice(0, -1));
+  };
+
+  const resetCurrentGame = () => {
+    setScores(INITIAL_SCORES);
+    setWinner(null);
+    setServingTeam(null);
+    setServerNumber(1);
+    setIsFirstServeOfGame(true);
+    setHistory([]);
+    setGameState('not_started');
+  };
+
+  const handleNewGame = () => {
+    resetCurrentGame();
+    setGameScores(INITIAL_SCORES);
+  };
+
+  // 次のゲームを開始する
+  const startNextGame = () => {
+    const losingTeam = winner === 'teamA' ? 'teamB' : 'teamA';
+    resetCurrentGame();
+    handleSelectFirstServer(losingTeam); // 前のゲームの敗者からサーブ
+  };
+
+  // --- チーム名編集ロジック ---
+  const handleNameChange = (team, newName) => {
+    setTeamNames(prev => ({ ...prev, [team]: newName }));
+  };
+
+  const handleNameClick = (team) => {
+    setEditing(prev => ({ ...prev, [team]: true }));
+  };
+
+  const handleNameBlur = (team) => {
+    setEditing(prev => ({ ...prev, [team]: false }));
+  };
+
+  // --- レンダリング --- 
+  const renderTeamArea = (teamId) => {
+    const isServing = servingTeam === teamId && gameState === 'in_progress';
+    const teamName = teamNames[teamId];
+    const displayServerNumber = isFirstServeOfGame ? 2 : serverNumber;
+
+    return (
+      <div className={`col-md-6 text-center team-area ${isServing ? 'serving' : ''}`}>
+        <div>
+          {editing[teamId] ? (
+            <input
+              type="text"
+              value={teamName}
+              onChange={(e) => handleNameChange(teamId, e.target.value)}
+              onBlur={() => handleNameBlur(teamId)}
+              autoFocus
+              className="team-name-input"
+            />
+          ) : (
+            <h2 className="team-name" onClick={() => handleNameClick(teamId)}>{teamName}</h2>
+          )}
+          <p className="score-display">{scores[teamId]}</p>
+          <p className="server-number">{isServing ? `Server #${displayServerNumber}` : ''}</p>
+        </div>
+        <button 
+          className="btn btn-primary point-button mt-auto" 
+          onClick={() => handlePoint(teamId)}
+          disabled={gameState !== 'in_progress'}
+        >
+          POINT
+        </button>
+      </div>
+    );
+  };
+
+  const renderServerSelection = () => (
+    <div className="text-center p-5">
+      <h2 className="mb-4">Who serves first?</h2>
+      <div className="d-grid gap-3 col-md-6 mx-auto">
+        <button className="btn btn-lg btn-success" onClick={() => handleSelectFirstServer('teamA')}>
+          {teamNames.teamA}
+        </button>
+        <button className="btn btn-lg btn-success" onClick={() => handleSelectFirstServer('teamB')}>
+          {teamNames.teamB}
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="App container py-4">
+      <header className="text-center my-4">
+        <h1 className="title">pickle-board</h1>
+      </header>
+
+      <main>
+        <div className="row mb-3">
+          <div className="col text-center">
+            <p className="game-score">
+              {teamNames.teamA}: {gameScores.teamA} - {gameScores.teamB} : {teamNames.teamB}
+            </p>
+          </div>
+        </div>
+
+        <div className="row team-row" style={{ minHeight: '400px' }}>
+          {gameState === 'not_started' ? renderServerSelection() : (
+            <>
+              {renderTeamArea('teamA')}
+              {renderTeamArea('teamB')}
+            </>
+          )}
+        </div>
+
+        {gameState === 'finished' && (
+          <div className="alert alert-success text-center mt-4" role="alert">
+            <h4>{teamNames[winner]} Wins the Game!</h4>
+            <button className="btn btn-success mt-2" onClick={startNextGame}>
+              Start Next Game
+            </button>
+          </div>
+        )}
+      </main>
+
+      <footer className="text-center mt-4 control-buttons">
+        <button 
+          className="btn btn-info me-2"
+          onClick={handleUndo}
+          disabled={history.length === 0}
+        >
+          Undo
+        </button>
+        <button className="btn btn-secondary me-2" onClick={resetCurrentGame}>
+          Reset Current Game
+        </button>
+        <button className="btn btn-danger" onClick={handleNewGame}>
+          New Game
+        </button>
+      </footer>
+    </div>
+  );
+}
+
+export default App;
