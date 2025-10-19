@@ -17,6 +17,8 @@ function App() {
   const [editing, setEditing] = useState({ teamA: false, teamB: false });
   const [history, setHistory] = useState([]);
   const [gameState, setGameState] = useState('not_started'); // not_started, in_progress, finished
+  const [matchFirstServer, setMatchFirstServer] = useState(null); // 試合の最初のサーバーを記録
+  const [currentGameInitialServer, setCurrentGameInitialServer] = useState(null); // 現在のゲームの最初のサーバー
 
   const checkWinner = useCallback(() => {
     const { teamA, teamB } = scores;
@@ -51,6 +53,8 @@ function App() {
       isFirstServeOfGame,
       winner,
       gameState,
+      matchFirstServer,
+      currentGameInitialServer,
     }]);
 
     if (winningTeam === servingTeam) {
@@ -75,6 +79,11 @@ function App() {
   };
 
   const handleSelectFirstServer = (team) => {
+    // 試合の最初のサーブの場合のみ設定
+    if (!matchFirstServer) {
+      setMatchFirstServer(team);
+    }
+    setCurrentGameInitialServer(team);
     setServingTeam(team);
     setGameState('in_progress');
   };
@@ -91,11 +100,14 @@ function App() {
     setIsFirstServeOfGame(lastState.isFirstServeOfGame);
     setWinner(lastState.winner);
     setGameState(lastState.gameState);
+    setMatchFirstServer(lastState.matchFirstServer);
+    setCurrentGameInitialServer(lastState.currentGameInitialServer);
 
     setHistory(prevHistory => prevHistory.slice(0, -1));
   };
 
-  const resetCurrentGame = () => {
+  // ゲームの状態を完全に初期化する
+  const resetFullGame = () => {
     setScores(INITIAL_SCORES);
     setWinner(null);
     setServingTeam(null);
@@ -105,16 +117,44 @@ function App() {
     setGameState('not_started');
   };
 
+  const handleResetCurrentGameClick = () => {
+    if (!currentGameInitialServer) {
+      resetFullGame();
+    } else {
+      setScores(INITIAL_SCORES);
+      setWinner(null);
+      setHistory([]);
+      setIsFirstServeOfGame(true);
+      setServerNumber(1);
+      setServingTeam(currentGameInitialServer);
+      setGameState('in_progress');
+    }
+  };
+
   const handleNewGame = () => {
-    resetCurrentGame();
+    resetFullGame();
     setGameScores(INITIAL_SCORES);
+    setMatchFirstServer(null);
+    setCurrentGameInitialServer(null);
   };
 
   // 次のゲームを開始する
   const startNextGame = () => {
-    const losingTeam = winner === 'teamA' ? 'teamB' : 'teamA';
-    resetCurrentGame();
-    handleSelectFirstServer(losingTeam); // 前のゲームの敗者からサーブ
+    const totalGames = gameScores.teamA + gameScores.teamB;
+    const nextServer = (totalGames % 2 === 0) 
+      ? matchFirstServer 
+      : (matchFirstServer === 'teamA' ? 'teamB' : 'teamA');
+
+    setScores(INITIAL_SCORES);
+    setWinner(null);
+    setHistory([]);
+    setIsFirstServeOfGame(true);
+    setServerNumber(1);
+    
+    // 次のゲームのサーバーをセットして開始
+    setCurrentGameInitialServer(nextServer);
+    setServingTeam(nextServer);
+    setGameState('in_progress');
   };
 
   // --- チーム名編集ロジック ---
@@ -221,7 +261,7 @@ function App() {
         >
           Undo
         </button>
-        <button className="btn btn-secondary me-2" onClick={resetCurrentGame}>
+        <button className="btn btn-secondary me-2" onClick={handleResetCurrentGameClick}>
           Reset Current Game
         </button>
         <button className="btn btn-danger" onClick={handleNewGame}>

@@ -121,3 +121,23 @@ body {
     font-size: 2rem;
   }
 }
+
+/* --- スマホ横向き対応 --- */
+@media (max-height: 450px) and (max-width: 900px) {
+  .score-display {
+    font-size: 4rem; /* 横向き時のスコアフォントサイズを調整 */
+  }
+  .team-name {
+    font-size: 1.8rem;
+  }
+  .point-button {
+    padding: 8px 0;
+    font-size: 1.2rem;
+  }
+  .row.team-row {
+    min-height: auto !important; /* style属性のmin-heightを上書き */
+  }
+  .team-area {
+    padding: 10px;
+  }
+}
