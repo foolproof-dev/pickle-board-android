@@ -208,13 +208,45 @@ function App() {
   const renderServerSelection = () => (
     <div className="text-center p-5">
       <h2 className="mb-4">Who serves first?</h2>
-      <div className="d-grid gap-3 col-md-6 mx-auto">
-        <button className="btn btn-lg btn-success" onClick={() => handleSelectFirstServer('teamA')}>
-          {teamNames.teamA}
-        </button>
-        <button className="btn btn-lg btn-success" onClick={() => handleSelectFirstServer('teamB')}>
-          {teamNames.teamB}
-        </button>
+      <div className="row justify-content-center">
+        <div className="col-md-5 text-center mb-3">
+          {editing.teamA ? (
+            <input
+              type="text"
+              value={teamNames.teamA}
+              onChange={(e) => handleNameChange('teamA', e.target.value)}
+              onBlur={() => handleNameBlur('teamA')}
+              autoFocus
+              className="team-name-input form-control-lg mb-2"
+            />
+          ) : (
+            <h3 className="team-name" onClick={() => handleNameClick('teamA')} style={{ cursor: 'pointer' }}>
+              {teamNames.teamA}
+            </h3>
+          )}
+          <button className="btn btn-lg btn-success" onClick={() => handleSelectFirstServer('teamA')}>
+            Select to Serve
+          </button>
+        </div>
+        <div className="col-md-5 text-center mb-3">
+          {editing.teamB ? (
+            <input
+              type="text"
+              value={teamNames.teamB}
+              onChange={(e) => handleNameChange('teamB', e.target.value)}
+              onBlur={() => handleNameBlur('teamB')}
+              autoFocus
+              className="team-name-input form-control-lg mb-2"
+            />
+          ) : (
+            <h3 className="team-name" onClick={() => handleNameClick('teamB')} style={{ cursor: 'pointer' }}>
+              {teamNames.teamB}
+            </h3>
+          )}
+          <button className="btn btn-lg btn-success" onClick={() => handleSelectFirstServer('teamB')}>
+            Select to Serve
+          </button>
+        </div>
       </div>
     </div>
   );
