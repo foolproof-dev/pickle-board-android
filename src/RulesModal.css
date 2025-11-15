@@ -2,6 +2,26 @@
   padding: 15px;
 }
 
+.modal-content {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+}
+
+.modal-header,
+.modal-footer {
+  background-color: var(--card-bg) !important;
+  border-bottom: 1px solid var(--card-border) !important;
+  border-top: 1px solid var(--card-border) !important;
+}
+
+.modal-title {
+  color: var(--text-color) !important;
+}
+
+.modal-header .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%); /* Make close button visible on dark background */
+}
+
 .table-of-contents ul {
   list-style: none;
   padding: 0;
@@ -13,11 +33,12 @@
 
 .table-of-contents a {
   text-decoration: none;
-  color: #007bff; /* Bootstrap primary blue */
+  color: var(--primary-color); /* Use primary color for links */
 }
 
 .table-of-contents a:hover {
   text-decoration: underline;
+  color: var(--accent-color); /* Use accent color on hover */
 }
 
 .rule-section {
@@ -26,13 +47,13 @@
 }
 
 .rule-section h3 {
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid var(--card-border);
   padding-bottom: 5px;
   margin-bottom: 15px;
 }
 
 .rule-section h4 {
-  color: #333;
+  color: var(--text-color);
   margin-top: 20px;
   margin-bottom: 10px;
 }

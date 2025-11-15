@@ -33,9 +33,8 @@ const RulesModal = ({ show, handleClose }) => {
               <li><a href="#basics" onClick={(e) => { e.preventDefault(); scrollToSection('basics'); }}>1. 基本</a></li>
               <li><a href="#scoring" onClick={(e) => { e.preventDefault(); scrollToSection('scoring'); }}>2. スコア</a></li>
               <li><a href="#serving" onClick={(e) => { e.preventDefault(); scrollToSection('serving'); }}>3. サーブ</a></li>
-              <li><a href="#twoBounce" onClick={(e) => { e.preventDefault(); scrollToSection('twoBounce'); }}>4. ツーバウンドルール</a></li>
-              <li><a href="#kitchen" onClick={(e) => { e.preventDefault(); scrollToSection('kitchen'); }}>5. ノンボレーゾーン（キッチン）</a></li>
-              <li><a href="#faults" onClick={(e) => { e.preventDefault(); scrollToSection('faults'); }}>6. フォルト（反則）</a></li>
+              <li><a href="#kitchen" onClick={(e) => { e.preventDefault(); scrollToSection('kitchen'); }}>4. ノンボレーゾーン（キッチン）</a></li>
+              <li><a href="#faults" onClick={(e) => { e.preventDefault(); scrollToSection('faults'); }}>5. フォルト（反則）</a></li>
             </ul>
           </nav>
 
@@ -45,9 +44,7 @@ const RulesModal = ({ show, handleClose }) => {
             <h4>ゲームの目的</h4>
             <p>ピックルボールはテニス、バドミントン、卓球の要素を組み合わせたパドルスポーツです。ボールをネット越しに打ち、相手が合法的に返球できないようにすることが目的です。</p>
             <h4>コートのレイアウト</h4>
-            <p>[コート図]</p>
-            {/* Placeholder for image */}
-            <div className="image-placeholder">コート図のプレースホルダー</div>
+            <img src="/images/court-layout.png" alt="Pickleball Court Layout" className="img-fluid mb-3" />
           </section>
 
           <section id="scoring" ref={sectionRefs.scoring} className="rule-section">
@@ -63,41 +60,30 @@ const RulesModal = ({ show, handleClose }) => {
           <section id="serving" ref={sectionRefs.serving} className="rule-section">
             <h3>3. サーブ</h3>
             <h4>サーブの打ち方（アンダーハンド）</h4>
-            <p>サーブはアンダーハンドで、パドルが腰より下でボールに接触するように打ちます。ボールを落として打つか、トスして打つことができます。</p>
-            {/* Placeholder for image */}
-            <div className="image-placeholder">アンダーハンドサーブのイラストプレースホルダー</div>
+            <p>サーブは必ずアンダーハンドで行います。腕を振り上げるように動かし、ボールに当たる瞬間、パドルのヘッドが手首より下にある必要があります。また、ボールとパドルの接触は腰より下で行われなければなりません。</p>
+            <img src="/images/serve-motion.png" alt="Underhand Serve Motion" className="img-fluid mb-3" />
             <h4>サーブの順番（ダブルス）</h4>
-            <p>ゲームの最初のサーブは右側のサービスコートから行われます。最初のフォルトの後、サーブ側のチームの2番目のプレイヤーがサーブします。2番目のフォルトの後、サイドアウトとなります。</p>
-            <h4>サーブを入れる場所</h4>
-            <p>サーブは対角線上の相手サービスコート内に着地し、ノンボレーゾーン（キッチン）を越える必要があります。</p>
-            {/* Placeholder for image */}
-            <div className="image-placeholder">対角線上のサーブ経路図のプレースホルダー</div>
-            <h4>レットサーブ</h4>
-            <p>サーブがネットに触れても、正しいサービスコート内に着地した場合、「レット」となり、やり直します。</p>
-          </section>
+            <p>各チームはサイドアウトする前に2回のサーブ権を持ちます。1人目のサーバーがフォルト（失敗）するまでサーブを続け、次に2人目のサーバーがフォルトするまでサーブを続けます。2人目のフォルトで「サイドアウト」となり、相手チームにサーブ権が移ります。ただし、ゲーム開始時の最初のサーブについては、1人目のサーバーがフォルトした時点でサイドアウトになります。</p>
+                        <h4>サーブを入れる場所</h4>
+                        <p>サーブは対角線上の相手サービスコート内に着地し、ノンボレーゾーン（キッチン）を越える必要があります。サーブがキッチン内に着地した場合はフォルトです。ネットに触れてから正しいサービスコートに入った場合、プレーは続行されます。</p>
+                        <h4>サーブ後のツーバウンドルール</h4>
+                        <p>サーブされたボールは、レシーバーが打ち返す前に一度バウンドしなければなりません。そして、その返球もサーバーサイドで一度バウンドしてからでなければ、打ち返すことはできません。この2回のバウンドの後は、ボレー（ノーバウンドでの返球）が許可されます。</p>
+                      </section>
 
-          <section id="twoBounce" ref={sectionRefs.twoBounce} className="rule-section">
-            <h3>4. ツーバウンドルール</h3>
-            <h4>ルールの説明</h4>
-            <p>サーブの後、ボールはレシーブ側のチームのコートで一度バウンドしなければなりません。その後、サーブ側のチームは返球が自分たちのコートで一度バウンドするのを待たなければなりません。この2回のバウンドの後、プレイヤーはバウンドしたボールを打つか、ボレー（バウンドする前に空中で打つ）することができます。</p>
-            {/* Placeholder for image */}
-            <div className="image-placeholder">ツーバウンドルールのシーケンス図のプレースホルダー</div>
-          </section>
+
 
           <section id="kitchen" ref={sectionRefs.kitchen} className="rule-section">
-            <h3>5. ノンボレーゾーン（キッチン）</h3>
-            <h4>それが何であるか</h4>
-            <p>これはネットの両側にある7フィートのエリアです。</p>
+            <h3>4. ノンボレーゾーン（キッチン）</h3>
+            <h4>キッチンとは？</h4>
+            <p>ネットの両側にある7フィートのエリアです。</p>
             <h4>キッチンでのルール</h4>
             <p>プレイヤーは、ノンボレーゾーン内に立っている間、またはボレー後に勢いでゾーン内に入った場合、ボールをボレー（空中で打つ）することはできません。ただし、ボールがゾーン内でバウンドした場合は、キッチンに入って打つことができます。</p>
-            {/* Placeholder for image */}
-            <div className="image-placeholder">キッチンでのフォルトを示す図のプレースホルダー</div>
           </section>
 
           <section id="faults" ref={sectionRefs.faults} className="rule-section">
-            <h3>6. フォルト（反則）</h3>
+            <h3>5. フォルト（反則）</h3>
             <h4>主なフォルト</h4>
-            <p>ルール違反があった場合、フォルトとなり、ラリーを失います。主なフォルトには、アウトオブバウンズ、ネットイン、ネットを越えなかった場合などがあります。</p>
+            <p>ルール違反があった場合、フォルトとなり、ラリーを失います。主なフォルトには、ボールがアウトオブバウンズになる、ネットを越えない、などがあります。（ラリー中にボールがネットに触れて相手コートに入るのは有効です。）</p>
             <h4>ノンボレーゾーンでのフォルト</h4>
             <p>キッチン内でボレーしたり、ボレー後に勢いでキッチンに足を踏み入れたりした場合。</p>
             <h4>サーブでのフォルト</h4>
@@ -105,11 +91,7 @@ const RulesModal = ({ show, handleClose }) => {
           </section>
         </div>
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          閉じる
-        </Button>
-      </Modal.Footer>
+
     </Modal>
   );
 };
