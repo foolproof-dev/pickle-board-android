@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import RulesModal from './RulesModal';
+import './RulesModal.css';
 
 // --- 定数 ---
 const INITIAL_SCORES = { teamA: 0, teamB: 0 };
@@ -19,6 +21,7 @@ function App() {
   const [gameState, setGameState] = useState('not_started'); // not_started, in_progress, finished
   const [matchFirstServer, setMatchFirstServer] = useState(null); // 試合の最初のサーバーを記録
   const [currentGameInitialServer, setCurrentGameInitialServer] = useState(null); // 現在のゲームの最初のサーバー
+  const [showRulesModal, setShowRulesModal] = useState(false); // New state for modal
 
   const checkWinner = useCallback(() => {
     const { teamA, teamB } = scores;
@@ -32,6 +35,10 @@ function App() {
       setGameState('finished');
     }
   }, [scores]);
+
+  // New functions for modal
+  const handleShowRulesModal = () => setShowRulesModal(true);
+  const handleCloseRulesModal = () => setShowRulesModal(false);
 
   // --- 副作用 ---
   useEffect(() => {
@@ -296,10 +303,19 @@ function App() {
         <button className="btn btn-secondary me-2" onClick={handleResetCurrentGameClick}>
           Reset Current Game
         </button>
-        <button className="btn btn-danger" onClick={handleNewGame}>
+        <button className="btn btn-danger me-2" onClick={handleNewGame}>
           New Game
         </button>
+        <button
+          className="btn btn-info"
+          onClick={handleShowRulesModal}
+        >
+          Rules
+        </button>
       </footer>
+
+      {/* Render the RulesModal */}
+      <RulesModal show={showRulesModal} handleClose={handleCloseRulesModal} />
     </div>
   );
 }
