@@ -6,6 +6,17 @@ import './RulesModal.css';
 const INITIAL_SCORES = { teamA: 0, teamB: 0 };
 const WINNING_SCORE = 11;
 
+const numberToWord = (num) => {
+  const words = {
+    0: 'zero', 1: 'one', 2: 'two', 3: 'three', 4: 'four',
+    5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine',
+    10: 'ten', 11: 'eleven', 12: 'twelve', 13: 'thirteen',
+    14: 'fourteen', 15: 'fifteen', 16: 'sixteen', 17: 'seventeen',
+    18: 'eighteen', 19: 'nineteen', 20: 'twenty',
+  };
+  return words[num] || String(num);
+};
+
 // --- メインコンポーネント ---
 function App() {
   // --- 状態管理 ---
@@ -145,6 +156,23 @@ function App() {
     setCurrentGameInitialServer(null);
   };
 
+  const handleAnnounceScore = () => {
+    if (!servingTeam || gameState !== 'in_progress') return;
+
+    const serverScore = scores[servingTeam];
+    const receiverTeam = servingTeam === 'teamA' ? 'teamB' : 'teamA';
+    const receiverScore = scores[receiverTeam];
+    const announcedServerNumber = isFirstServeOfGame ? 2 : serverNumber;
+
+    const serverScoreWord = numberToWord(serverScore);
+    const receiverScoreWord = numberToWord(receiverScore);
+    const serverNumberWord = numberToWord(announcedServerNumber);
+
+    const utterance = new SpeechSynthesisUtterance(`${serverScoreWord} ${receiverScoreWord} ${serverNumberWord}`);
+    utterance.lang = 'en-US';
+    window.speechSynthesis.speak(utterance);
+  };
+
   // 次のゲームを開始する
   const startNextGame = () => {
     const totalGames = gameScores.teamA + gameScores.teamB;
@@ -260,8 +288,13 @@ function App() {
 
   return (
     <div className="App container py-4">
-      <header className="text-center my-4">
+      <header className="text-center my-4 position-relative">
         <h1 className="title">pickle-board</h1>
+        <div className="rules-button-container">
+          <button className="btn btn-info rules-button" onClick={handleShowRulesModal}>
+            ?
+          </button>
+        </div>
       </header>
 
       <main>
@@ -306,11 +339,8 @@ function App() {
         <button className="btn btn-danger me-2" onClick={handleNewGame}>
           New Game
         </button>
-        <button
-          className="btn btn-info"
-          onClick={handleShowRulesModal}
-        >
-          Rules
+        <button className="btn btn-success me-2" onClick={handleAnnounceScore}>
+          Announce Score
         </button>
       </footer>
 

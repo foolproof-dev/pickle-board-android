@@ -141,3 +141,31 @@ body {
     padding: 10px;
   }
 }
+
+.rules-button-container {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+}
+
+.rules-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Adjust position for smaller screens */
+@media (max-width: 767.98px) {
+  .rules-button-container {
+    top: 20px;
+    right: 20px;
+    transform: none;
+  }
+}
