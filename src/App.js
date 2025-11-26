@@ -301,9 +301,13 @@ function App() {
 
       return (
         <div className={`scoreboard-team-area ${isServing ? 'scoreboard-serving' : ''}`}>
-          <div className="scoreboard-score">{scores[teamId]}</div>
-          <div className="scoreboard-server-number">
-            {isServing ? `Server #${displayServerNumber}` : ''}
+          <div className="scoreboard-score-container">
+            <div className="scoreboard-score">{scores[teamId]}</div>
+            {isServing && (
+              <div className="scoreboard-server-number">
+                {displayServerNumber}
+              </div>
+            )}
           </div>
           <button
             className={`scoreboard-point-button scoreboard-point-button-${teamId}`}
