@@ -306,7 +306,7 @@ function App() {
             {isServing ? `Server #${displayServerNumber}` : ''}
           </div>
           <button
-            className="scoreboard-point-button"
+            className={`scoreboard-point-button scoreboard-point-button-${teamId}`}
             onClick={() => handlePoint(teamId)}
             disabled={gameState !== 'in_progress'}
           >

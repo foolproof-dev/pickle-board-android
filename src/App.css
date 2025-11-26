@@ -2,7 +2,8 @@
   --background-color: #1a1a1a;
   --text-color: #f0f0f0;
   --primary-color: #00a8ff;
-  --accent-color: #f7ff00; /* Neon Yellow */
+  --accent-color: #f7ff00;
+  /* Neon Yellow */
   --serving-glow: rgba(247, 255, 0, 0.6);
   --card-bg: #2a2a2a;
   --card-border: #444;
@@ -37,7 +38,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .serving {
@@ -63,7 +64,8 @@ body {
   font-size: 1.5rem;
   font-weight: bold;
   color: var(--primary-color);
-  height: 2.5rem; /* 高さを確保 */
+  height: 2.5rem;
+  /* 高さを確保 */
   text-transform: uppercase;
 }
 
@@ -111,12 +113,15 @@ body {
   .team-row {
     flex-direction: column;
   }
+
   .team-area {
     margin-bottom: 20px;
   }
+
   .score-display {
     font-size: 6rem;
   }
+
   .team-name {
     font-size: 2rem;
   }
@@ -125,18 +130,24 @@ body {
 /* --- スマホ横向き対応 --- */
 @media (max-height: 450px) and (max-width: 900px) {
   .score-display {
-    font-size: 4rem; /* 横向き時のスコアフォントサイズを調整 */
+    font-size: 4rem;
+    /* 横向き時のスコアフォントサイズを調整 */
   }
+
   .team-name {
     font-size: 1.8rem;
   }
+
   .point-button {
     padding: 8px 0;
     font-size: 1.2rem;
   }
+
   .row.team-row {
-    min-height: auto !important; /* style属性のmin-heightを上書き */
+    min-height: auto !important;
+    /* style属性のmin-heightを上書き */
   }
+
   .team-area {
     padding: 10px;
   }
@@ -307,12 +318,20 @@ body {
   cursor: not-allowed;
 }
 
+.scoreboard-point-button-teamA {
+  left: 30px;
+}
+
+.scoreboard-point-button-teamB {
+  right: 30px;
+}
+
 .scoreboard-divider {
   width: 3px;
-  background: linear-gradient(to bottom, 
-    transparent 0%, 
-    var(--accent-color) 50%, 
-    transparent 100%);
+  background: linear-gradient(to bottom,
+      transparent 0%,
+      var(--accent-color) 50%,
+      transparent 100%);
 }
 
 .scoreboard-start-message {
@@ -355,6 +374,7 @@ body {
   .scoreboard-score {
     font-size: 15rem;
   }
+
   .scoreboard-server-number {
     font-size: 2rem;
   }
@@ -364,9 +384,11 @@ body {
   .scoreboard-score {
     font-size: 12rem;
   }
+
   .scoreboard-server-number {
     font-size: 1.8rem;
   }
+
   .scoreboard-point-button {
     font-size: 1rem;
     padding: 8px 20px;
@@ -377,6 +399,7 @@ body {
   .scoreboard-score {
     font-size: 10rem;
   }
+
   .scoreboard-server-number {
     font-size: 1.5rem;
   }
@@ -387,14 +410,16 @@ body {
   .scoreboard-teams {
     flex-direction: column;
   }
+
   .scoreboard-divider {
     width: 100%;
     height: 3px;
-    background: linear-gradient(to right, 
-      transparent 0%, 
-      var(--accent-color) 50%, 
-      transparent 100%);
+    background: linear-gradient(to right,
+        transparent 0%,
+        var(--accent-color) 50%,
+        transparent 100%);
   }
+
   .scoreboard-score {
     font-size: 12rem;
   }
