@@ -310,7 +310,7 @@ function App() {
             onClick={() => handlePoint(teamId)}
             disabled={gameState !== 'in_progress'}
           >
-            POINT
+            +
           </button>
         </div>
       );
