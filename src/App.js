@@ -327,7 +327,7 @@ function App() {
             {gameScores.teamA} - {gameScores.teamB}
           </div>
           <button className="scoreboard-mode-toggle" onClick={toggleDisplayMode}>
-            📊
+            ⚙️
           </button>
         </div>
 

@@ -232,6 +232,69 @@ body {
 }
 
 .scoreboard-game-score {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #aaa;
+}
+
+.scoreboard-mode-toggle {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: transform 0.2s;
+}
+
+.scoreboard-mode-toggle:hover {
+  transform: scale(1.1);
+}
+
+.scoreboard-teams {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.scoreboard-team-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: var(--card-bg);
+  border: 3px solid var(--card-border);
+  transition: all 0.3s ease-in-out;
+  position: relative;
+}
+
+.scoreboard-serving {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 40px var(--serving-glow);
+}
+
+.scoreboard-score-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 20px;
+}
+
+.scoreboard-score {
+  font-family: 'Anton', sans-serif;
+  font-size: 25rem;
+  font-weight: normal;
+  line-height: 1;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.scoreboard-server-number {
+  font-size: 8rem;
+  font-weight: bold;
+  color: var(--primary-color);
   line-height: 1;
 }
 
