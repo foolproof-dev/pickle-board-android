@@ -33,6 +33,7 @@ function App() {
   const [matchFirstServer, setMatchFirstServer] = useState(null); // 試合の最初のサーバーを記録
   const [currentGameInitialServer, setCurrentGameInitialServer] = useState(null); // 現在のゲームの最初のサーバー
   const [showRulesModal, setShowRulesModal] = useState(false); // New state for modal
+  const [displayMode, setDisplayMode] = useState('normal'); // 'normal' or 'scoreboard'
 
   const checkWinner = useCallback(() => {
     const { teamA, teamB } = scores;
@@ -50,6 +51,11 @@ function App() {
   // New functions for modal
   const handleShowRulesModal = () => setShowRulesModal(true);
   const handleCloseRulesModal = () => setShowRulesModal(false);
+
+  // Display mode toggle
+  const toggleDisplayMode = () => {
+    setDisplayMode(prev => prev === 'normal' ? 'scoreboard' : 'normal');
+  };
 
   // --- 副作用 ---
   useEffect(() => {
@@ -176,8 +182,8 @@ function App() {
   // 次のゲームを開始する
   const startNextGame = () => {
     const totalGames = gameScores.teamA + gameScores.teamB;
-    const nextServer = (totalGames % 2 === 0) 
-      ? matchFirstServer 
+    const nextServer = (totalGames % 2 === 0)
+      ? matchFirstServer
       : (matchFirstServer === 'teamA' ? 'teamB' : 'teamA');
 
     setScores(INITIAL_SCORES);
@@ -185,7 +191,7 @@ function App() {
     setHistory([]);
     setIsFirstServeOfGame(true);
     setServerNumber(1);
-    
+
     // 次のゲームのサーバーをセットして開始
     setCurrentGameInitialServer(nextServer);
     setServingTeam(nextServer);
@@ -229,8 +235,8 @@ function App() {
           <p className="score-display">{scores[teamId]}</p>
           <p className="server-number">{isServing ? `Server #${displayServerNumber}` : ''}</p>
         </div>
-        <button 
-          className="btn btn-primary point-button mt-auto" 
+        <button
+          className="btn btn-primary point-button mt-auto"
           onClick={() => handlePoint(teamId)}
           disabled={gameState !== 'in_progress'}
         >
@@ -286,66 +292,139 @@ function App() {
     </div>
   );
 
-  return (
-    <div className="App container py-4">
-      <header className="text-center my-4 position-relative">
-        <h1 className="title">pickle-board</h1>
-        <div className="rules-button-container">
-          <button className="btn btn-info rules-button" onClick={handleShowRulesModal}>
-            ?
+  // --- 得点盤モードのレンダリング ---
+  const renderScoreboardMode = () => {
+    const displayServerNumber = isFirstServeOfGame ? 2 : serverNumber;
+
+    const renderScoreboardTeam = (teamId) => {
+      const isServing = servingTeam === teamId && gameState === 'in_progress';
+
+      return (
+        <div className={`scoreboard-team-area ${isServing ? 'scoreboard-serving' : ''}`}>
+          <div className="scoreboard-score">{scores[teamId]}</div>
+          <div className="scoreboard-server-number">
+            {isServing ? `Server #${displayServerNumber}` : ''}
+          </div>
+          <button
+            className="scoreboard-point-button"
+            onClick={() => handlePoint(teamId)}
+            disabled={gameState !== 'in_progress'}
+          >
+            POINT
           </button>
         </div>
-      </header>
+      );
+    };
 
-      <main>
-        <div className="row mb-3">
-          <div className="col text-center">
-            <p className="game-score">
-              {teamNames.teamA}: {gameScores.teamA} - {gameScores.teamB} : {teamNames.teamB}
-            </p>
+    return (
+      <div className="scoreboard-mode">
+        <div className="scoreboard-header">
+          <div className="scoreboard-game-score">
+            {gameScores.teamA} - {gameScores.teamB}
           </div>
+          <button className="scoreboard-mode-toggle" onClick={toggleDisplayMode}>
+            ⚙️
+          </button>
         </div>
 
-        <div className="row team-row" style={{ minHeight: '400px' }}>
-          {gameState === 'not_started' ? renderServerSelection() : (
-            <>
-              {renderTeamArea('teamA')}
-              {renderTeamArea('teamB')}
-            </>
-          )}
-        </div>
+        {gameState === 'not_started' ? (
+          <div className="scoreboard-start-message">
+            <h2>Please select first server in normal mode</h2>
+            <button className="btn btn-lg btn-primary mt-3" onClick={toggleDisplayMode}>
+              Go to Normal Mode
+            </button>
+          </div>
+        ) : (
+          <div className="scoreboard-teams">
+            {renderScoreboardTeam('teamA')}
+            <div className="scoreboard-divider"></div>
+            {renderScoreboardTeam('teamB')}
+          </div>
+        )}
 
         {gameState === 'finished' && (
-          <div className="alert alert-success text-center mt-4" role="alert">
-            <h4>{teamNames[winner]} Wins the Game!</h4>
-            <button className="btn btn-success mt-2" onClick={startNextGame}>
+          <div className="scoreboard-winner-overlay">
+            <h2>{teamNames[winner]} Wins!</h2>
+            <button className="btn btn-success btn-lg mt-3" onClick={startNextGame}>
               Start Next Game
             </button>
           </div>
         )}
-      </main>
+      </div>
+    );
+  };
 
-      <footer className="text-center mt-4 control-buttons">
-        <button 
-          className="btn btn-info me-2"
-          onClick={handleUndo}
-          disabled={history.length === 0}
-        >
-          Undo
-        </button>
-        <button className="btn btn-secondary me-2" onClick={handleResetCurrentGameClick}>
-          Reset Current Game
-        </button>
-        <button className="btn btn-danger me-2" onClick={handleNewGame}>
-          New Game
-        </button>
-        <button className="btn btn-success me-2" onClick={handleAnnounceScore}>
-          Announce Score
-        </button>
-      </footer>
+  return (
+    <div className="App container py-4">
+      {displayMode === 'scoreboard' ? (
+        renderScoreboardMode()
+      ) : (
+        <>
+          <header className="text-center my-4 position-relative">
+            <h1 className="title">pickle-board</h1>
+            <div className="rules-button-container">
+              <button className="btn btn-info rules-button" onClick={handleShowRulesModal}>
+                ?
+              </button>
+            </div>
+            <div className="mode-toggle-container">
+              <button className="btn btn-warning mode-toggle-button" onClick={toggleDisplayMode}>
+                📊
+              </button>
+            </div>
+          </header>
 
-      {/* Render the RulesModal */}
-      <RulesModal show={showRulesModal} handleClose={handleCloseRulesModal} />
+          <main>
+            <div className="row mb-3">
+              <div className="col text-center">
+                <p className="game-score">
+                  {teamNames.teamA}: {gameScores.teamA} - {gameScores.teamB} : {teamNames.teamB}
+                </p>
+              </div>
+            </div>
+
+            <div className="row team-row" style={{ minHeight: '400px' }}>
+              {gameState === 'not_started' ? renderServerSelection() : (
+                <>
+                  {renderTeamArea('teamA')}
+                  {renderTeamArea('teamB')}
+                </>
+              )}
+            </div>
+
+            {gameState === 'finished' && (
+              <div className="alert alert-success text-center mt-4" role="alert">
+                <h4>{teamNames[winner]} Wins the Game!</h4>
+                <button className="btn btn-success mt-2" onClick={startNextGame}>
+                  Start Next Game
+                </button>
+              </div>
+            )}
+          </main>
+
+          <footer className="text-center mt-4 control-buttons">
+            <button
+              className="btn btn-info me-2"
+              onClick={handleUndo}
+              disabled={history.length === 0}
+            >
+              Undo
+            </button>
+            <button className="btn btn-secondary me-2" onClick={handleResetCurrentGameClick}>
+              Reset Current Game
+            </button>
+            <button className="btn btn-danger me-2" onClick={handleNewGame}>
+              New Game
+            </button>
+            <button className="btn btn-success me-2" onClick={handleAnnounceScore}>
+              Announce Score
+            </button>
+          </footer>
+
+          {/* Render the RulesModal */}
+          <RulesModal show={showRulesModal} handleClose={handleCloseRulesModal} />
+        </>
+      )}
     </div>
   );
 }

@@ -169,3 +169,233 @@ body {
     transform: none;
   }
 }
+
+/* --- Mode Toggle Button --- */
+.mode-toggle-container {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+}
+
+.mode-toggle-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 767.98px) {
+  .mode-toggle-container {
+    top: 20px;
+    left: 20px;
+    transform: none;
+  }
+}
+
+/* --- Scoreboard Display Mode --- */
+.scoreboard-mode {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  z-index: 1000;
+}
+
+.scoreboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: rgba(42, 42, 42, 0.8);
+}
+
+.scoreboard-game-score {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #aaa;
+}
+
+.scoreboard-mode-toggle {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: transform 0.2s;
+}
+
+.scoreboard-mode-toggle:hover {
+  transform: scale(1.1);
+}
+
+.scoreboard-teams {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.scoreboard-team-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: var(--card-bg);
+  border: 3px solid var(--card-border);
+  transition: all 0.3s ease-in-out;
+  position: relative;
+}
+
+.scoreboard-serving {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 40px var(--serving-glow);
+}
+
+.scoreboard-score {
+  font-family: 'Anton', sans-serif;
+  font-size: 20rem;
+  font-weight: normal;
+  line-height: 1;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.scoreboard-server-number {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  height: 4rem;
+  text-transform: uppercase;
+  margin-top: 20px;
+}
+
+.scoreboard-point-button {
+  position: absolute;
+  bottom: 30px;
+  padding: 10px 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 8px;
+  background-color: var(--primary-color);
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.scoreboard-point-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 168, 255, 0.4);
+}
+
+.scoreboard-point-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.scoreboard-divider {
+  width: 3px;
+  background: linear-gradient(to bottom, 
+    transparent 0%, 
+    var(--accent-color) 50%, 
+    transparent 100%);
+}
+
+.scoreboard-start-message {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color);
+}
+
+.scoreboard-start-message h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.scoreboard-winner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+
+.scoreboard-winner-overlay h2 {
+  font-size: 4rem;
+  color: var(--accent-color);
+  margin-bottom: 30px;
+}
+
+/* --- Scoreboard Responsive Design --- */
+/* Optimized for landscape orientation */
+@media (max-width: 1200px) {
+  .scoreboard-score {
+    font-size: 15rem;
+  }
+  .scoreboard-server-number {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .scoreboard-score {
+    font-size: 12rem;
+  }
+  .scoreboard-server-number {
+    font-size: 1.8rem;
+  }
+  .scoreboard-point-button {
+    font-size: 1rem;
+    padding: 8px 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .scoreboard-score {
+    font-size: 10rem;
+  }
+  .scoreboard-server-number {
+    font-size: 1.5rem;
+  }
+}
+
+/* Portrait orientation - still usable but not optimal */
+@media (orientation: portrait) {
+  .scoreboard-teams {
+    flex-direction: column;
+  }
+  .scoreboard-divider {
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, 
+      transparent 0%, 
+      var(--accent-color) 50%, 
+      transparent 100%);
+  }
+  .scoreboard-score {
+    font-size: 12rem;
+  }
+}
