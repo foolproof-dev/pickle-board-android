@@ -326,9 +326,14 @@ function App() {
           <div className="scoreboard-game-score">
             {gameScores.teamA} - {gameScores.teamB}
           </div>
-          <button className="scoreboard-mode-toggle" onClick={toggleDisplayMode}>
-            ⚙️
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <button className="btn btn-info scoreboard-announce-button" onClick={handleAnnounceScore}>
+              🔊
+            </button>
+            <button className="btn btn-warning scoreboard-mode-toggle" onClick={toggleDisplayMode}>
+              📊
+            </button>
+          </div>
         </div>
 
         {gameState === 'not_started' ? (

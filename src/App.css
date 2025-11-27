@@ -227,7 +227,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 5px 20px;
   background-color: rgba(42, 42, 42, 0.8);
 }
 
@@ -238,11 +238,15 @@ body {
 }
 
 .scoreboard-mode-toggle {
-  background: none;
-  border: none;
-  font-size: 1.8rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  padding: 5px 10px;
   transition: transform 0.2s;
 }
 
@@ -433,4 +437,17 @@ body {
   .scoreboard-score {
     font-size: 12rem;
   }
+}
+.scoreboard-announce-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+  margin-right: 10px;
 }
