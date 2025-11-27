@@ -332,11 +332,11 @@ body {
   cursor: not-allowed;
 }
 
-.scoreboard-point-button-teamA {
+.scoreboard-point-button-left {
   left: 30px;
 }
 
-.scoreboard-point-button-teamB {
+.scoreboard-point-button-right {
   right: 30px;
 }
 

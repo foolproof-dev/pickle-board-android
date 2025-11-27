@@ -296,7 +296,7 @@ function App() {
   const renderScoreboardMode = () => {
     const displayServerNumber = isFirstServeOfGame ? 2 : serverNumber;
 
-    const renderScoreboardTeam = (teamId) => {
+    const renderScoreboardTeam = (teamId, position) => {
       const isServing = servingTeam === teamId && gameState === 'in_progress';
 
       return (
@@ -310,7 +310,7 @@ function App() {
             )}
           </div>
           <button
-            className={`scoreboard-point-button scoreboard-point-button-${teamId}`}
+            className={`scoreboard-point-button scoreboard-point-button-${position}`}
             onClick={() => handlePoint(teamId)}
             disabled={gameState !== 'in_progress'}
           >
@@ -324,7 +324,7 @@ function App() {
       <div className="scoreboard-mode">
         <div className="scoreboard-header">
           <div className="scoreboard-game-score">
-            {gameScores.teamA} - {gameScores.teamB}
+            {teamNames.teamB}: {gameScores.teamB} - {gameScores.teamA} : {teamNames.teamA}
           </div>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <button className="btn btn-info scoreboard-announce-button" onClick={handleAnnounceScore}>
@@ -345,9 +345,9 @@ function App() {
           </div>
         ) : (
           <div className="scoreboard-teams">
-            {renderScoreboardTeam('teamA')}
+            {renderScoreboardTeam('teamB', 'left')}
             <div className="scoreboard-divider"></div>
-            {renderScoreboardTeam('teamB')}
+            {renderScoreboardTeam('teamA', 'right')}
           </div>
         )}
 
