@@ -21,3 +21,18 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Android (Capacitor)
+/android/local.properties
+/android/app/build
+/android/build
+/android/.gradle
+/android/app/src/main/assets/public
+/android/app/src/main/assets/capacitor.config.json
+/android/app/src/main/assets/capacitor.plugins.json
+/android/capacitor-cordova-android-plugins/build
+
+# Release signing (NEVER commit)
+*.jks
+*.keystore
+/android/keystore.properties

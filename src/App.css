@@ -451,3 +451,8 @@ body {
   transition: transform 0.2s;
   margin-right: 10px;
 }
+
+/* --- Android: 画面下部のバナー広告と操作ボタンが重ならないように余白を確保 --- */
+.App.has-banner {
+  padding-bottom: 80px !important;
+}

@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">pickle-board</string>
+    <string name="title_activity_main">pickle-board</string>
+    <string name="package_name">dev.foolproof.pickleboard</string>
+    <string name="custom_url_scheme">dev.foolproof.pickleboard</string>
+    <!-- AdMob アプリ ID。以下は Google 公式のテスト用 App ID。本番公開前に自分の AdMob App ID に差し替える -->
+    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+</resources>

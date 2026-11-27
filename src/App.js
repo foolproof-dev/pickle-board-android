@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import RulesModal from './RulesModal';
 import './RulesModal.css';
+import { initAds, showInterstitialIfReady, showBanner, hideBanner, adsInfo } from './ads';
+import { setupNative } from './native';
 
 // --- 定数 ---
 const INITIAL_SCORES = { teamA: 0, teamB: 0 };
@@ -63,6 +65,31 @@ function App() {
       checkWinner();
     }
   }, [scores, checkWinner, gameState]);
+
+  // ネイティブ機能（画面常時ON等）と広告SDKの初期化（起動時に1回）
+  useEffect(() => {
+    setupNative();
+    initAds();
+  }, []);
+
+  // 1ゲーム終了時にインタースティシャル広告を表示
+  // （Winner 表示を一瞬見せてから全画面広告を出す）
+  useEffect(() => {
+    if (gameState !== 'finished') return undefined;
+    const timer = setTimeout(() => {
+      showInterstitialIfReady();
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, [gameState]);
+
+  // バナー広告：通常モードのみ表示、得点盤モードでは非表示
+  useEffect(() => {
+    if (displayMode === 'scoreboard') {
+      hideBanner();
+    } else {
+      showBanner();
+    }
+  }, [displayMode]);
 
   // --- 主要ロジック ---
   const handlePoint = (winningTeam) => {
@@ -364,7 +391,7 @@ function App() {
   };
 
   return (
-    <div className="App container py-4">
+    <div className={`App container py-4 ${adsInfo.isNative && displayMode === 'normal' ? 'has-banner' : ''}`}>
       {displayMode === 'scoreboard' ? (
         renderScoreboardMode()
       ) : (
