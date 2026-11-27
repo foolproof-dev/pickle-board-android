@@ -37,5 +37,7 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "homepage": ".",
+  "description": "pickle-board - Pickleball doubles scoreboard (Android app via Capacitor)"
 }

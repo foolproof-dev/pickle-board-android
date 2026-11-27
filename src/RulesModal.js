@@ -43,7 +43,7 @@ const RulesModal = ({ show, handleClose }) => {
           <section id="basics" ref={sectionRefs.basics} className="rule-section">
             <h3>1. 基本</h3>
             <p>ピックルボールは、テニス、バドミントン、卓球の要素を組み合わせたスポーツです。ボールをネット越しに打ち合い、相手が返球できなくなるとポイントが入ります。</p>
-            <img src="/images/court-layout.png" alt="Pickleball Court Layout" className="img-fluid mb-3" />
+            <img src={`${process.env.PUBLIC_URL}/images/court-layout.png`} alt="Pickleball Court Layout" className="img-fluid mb-3" />
           </section>
 
           <section id="scoring" ref={sectionRefs.scoring} className="rule-section">
@@ -54,7 +54,7 @@ const RulesModal = ({ show, handleClose }) => {
             <p>通常、1ゲームは11点先取で勝利となります。ただし、必ず2点差以上をつける必要があります（例: 11-9, 12-10）。</p>
             <h4>スコアのコール</h4>
             <p>サーバーはサーブを打つ前に、必ずスコアをコールします。コールは「自分のチームの点数 → 相手チームの点数 → サーバー番号（1 or 2）」の順で行います。</p>
-            <p class="small text-muted">例: "eight three two" (8 - 3 で、2人目のサーバー)</p>
+            <p className="small text-muted">例: "eight three two" (8 - 3 で、2人目のサーバー)</p>
           </section>
 
           <section id="serving" ref={sectionRefs.serving} className="rule-section">
@@ -67,7 +67,7 @@ const RulesModal = ({ show, handleClose }) => {
               <li>サーバーはベースラインの後ろから、対角線上にある相手コートのサービスコート（キッチンの後ろ）を狙ってサーブを打ちます。</li>
               <li>サーブ権は1回のみです。</li>
             </ul>
-            <img src="/images/serve-motion.png" alt="Underhand Serve Motion" className="img-fluid mb-3" />
+            <img src={`${process.env.PUBLIC_URL}/images/serve-motion.png`} alt="Underhand Serve Motion" className="img-fluid mb-3" />
             <h4>サーバーの交代（ダブルス）</h4>
             <p>各チームはサイドアウトするまで2回のサーブ権を持ちます（1人目と2人目のサーバー）。ただし、ゲーム開始時の最初のサーブ権だけは、1人目のサーバーがフォルトした時点でサイドアウト（相手チームにサーブ権が移動）となります。</p>
             <h4>サーブがネットに当たった場合</h4>

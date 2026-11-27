@@ -1,0 +1,24 @@
+/* Bundled web fonts (SIL Open Font License) so the app works offline inside the Android WebView.
+   Anton   : https://fonts.google.com/specimen/Anton
+   Poppins : https://fonts.google.com/specimen/Poppins */
+@font-face {
+  font-family: 'Anton';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./anton-latin-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./poppins-latin-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./poppins-latin-600.woff2') format('woff2');
+}
