@@ -98,6 +98,8 @@ Android Studio が開いたら **▶ Run** でエミュレータ／実機にイ�
 | `npm run android:debug-apk` | sync → デバッグ APK 生成（`android/app/build/outputs/apk/debug/`） |
 | `npm run android:release-aab` | sync → リリース AAB 生成（署名設定が必要） |
 
+すべてのスクリプトは **Windows / macOS / Linux 共通**で動作します（Gradle は `scripts/gradlew.js` が OS に応じて `gradlew.bat` / `./gradlew` を呼び分けます）。ビルド設定の環境変数は `.env` に記載しています。
+
 > **Web 側のコードを変更したら、必ず `npm run android:sync` を実行**してから Android をビルドしてください。
 
 ---
@@ -213,6 +215,8 @@ npm run android:release-aab
 | 症状 | 対処 |
 |---|---|
 | `invalid source release: 21` | JDK 21 を使用してください（`JAVA_HOME` の確認） |
+| `'GENERATE_SOURCEMAP' は、内部コマンドまたは外部コマンド…` (Windows) | 旧バージョンの `package.json` です。`git pull` して最新にしてください（環境変数は `.env` に移動済み） |
+| `npx cap open android` で Android Studio が開かない | 環境変数 `CAPACITOR_ANDROID_STUDIO_PATH` に Android Studio の実行ファイル（例: `C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe`）を設定するか、Android Studio から `android/` フォルダを直接開いてください |
 | Gradle daemon が落ちる（メモリ不足） | `android/gradle.properties` の `org.gradle.jvmargs=-Xmx1536m` を環境に合わせて調整 |
 | 広告が表示されない | ネイティブ (Android) でのみ動作します。Logcat で `[ads]` を検索してエラー確認。インタースティシャルは読み込み完了前のゲーム終了ではスキップされ、次回表示されます |
 | Web を変更したのにアプリに反映されない | `npm run android:sync` を実行してからビルド |
