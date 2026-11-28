@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import RulesModal from './RulesModal';
 import './RulesModal.css';
-import { initAds, showInterstitialIfReady, showBanner, hideBanner, adsInfo } from './ads';
-import { setupNative } from './native';
+import { initAds, showInterstitialAndWait } from './ads';
+import { setupNative, saveAndShareImage } from './native';
 
 // --- 定数 ---
 const INITIAL_SCORES = { teamA: 0, teamB: 0 };
@@ -34,8 +34,12 @@ function App() {
   const [gameState, setGameState] = useState('not_started'); // not_started, in_progress, finished
   const [matchFirstServer, setMatchFirstServer] = useState(null); // 試合の最初のサーバーを記録
   const [currentGameInitialServer, setCurrentGameInitialServer] = useState(null); // 現在のゲームの最初のサーバー
-  const [showRulesModal, setShowRulesModal] = useState(false); // New state for modal
+  const [showRulesModal, setShowRulesModal] = useState(false);
   const [displayMode, setDisplayMode] = useState('normal'); // 'normal' or 'scoreboard'
+  const [isTransitioning, setIsTransitioning] = useState(false); // 広告表示中のフラグ
+
+  // 結果カードのキャプチャ用 ref
+  const resultCardRef = useRef(null);
 
   const checkWinner = useCallback(() => {
     const { teamA, teamB } = scores;
@@ -50,7 +54,7 @@ function App() {
     }
   }, [scores]);
 
-  // New functions for modal
+  // Modal functions
   const handleShowRulesModal = () => setShowRulesModal(true);
   const handleCloseRulesModal = () => setShowRulesModal(false);
 
@@ -71,25 +75,6 @@ function App() {
     setupNative();
     initAds();
   }, []);
-
-  // 1ゲーム終了時にインタースティシャル広告を表示
-  // （Winner 表示を一瞬見せてから全画面広告を出す）
-  useEffect(() => {
-    if (gameState !== 'finished') return undefined;
-    const timer = setTimeout(() => {
-      showInterstitialIfReady();
-    }, 1200);
-    return () => clearTimeout(timer);
-  }, [gameState]);
-
-  // バナー広告：通常モードのみ表示、得点盤モードでは非表示
-  useEffect(() => {
-    if (displayMode === 'scoreboard') {
-      hideBanner();
-    } else {
-      showBanner();
-    }
-  }, [displayMode]);
 
   // --- 主要ロジック ---
   const handlePoint = (winningTeam) => {
@@ -206,8 +191,15 @@ function App() {
     window.speechSynthesis.speak(utterance);
   };
 
-  // 次のゲームを開始する
-  const startNextGame = () => {
+  // 次のゲームを開始する（広告を挟む）
+  const handleNextGame = async () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+
+    // 広告を表示して閉じるまで待つ
+    await showInterstitialAndWait();
+
+    // 次のゲームの設定
     const totalGames = gameScores.teamA + gameScores.teamB;
     const nextServer = (totalGames % 2 === 0)
       ? matchFirstServer
@@ -223,6 +215,13 @@ function App() {
     setCurrentGameInitialServer(nextServer);
     setServingTeam(nextServer);
     setGameState('in_progress');
+    setIsTransitioning(false);
+  };
+
+  // 結果画像を保存・共有する
+  const handleSaveResult = () => {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    saveAndShareImage(resultCardRef.current, `pickle-board-result-${timestamp}`);
   };
 
   // --- チーム名編集ロジック ---
@@ -236,6 +235,69 @@ function App() {
 
   const handleNameBlur = (team) => {
     setEditing(prev => ({ ...prev, [team]: false }));
+  };
+
+  // --- ゲーム結果画面 ---
+  const renderResultScreen = () => {
+    if (gameState !== 'finished' || !winner) return null;
+
+    const loser = winner === 'teamA' ? 'teamB' : 'teamA';
+
+    return (
+      <div className="result-overlay">
+        <div className="result-card" ref={resultCardRef}>
+          <div className="result-header">
+            <h2 className="result-title">🏆 GAME RESULT</h2>
+          </div>
+
+          <div className="result-winner-section">
+            <span className="result-crown">👑</span>
+            <h3 className="result-winner-name">{teamNames[winner]}</h3>
+            <p className="result-winner-label">WINNER</p>
+          </div>
+
+          <div className="result-score-section">
+            <div className="result-score-team">
+              <span className="result-score-name">{teamNames[winner]}</span>
+              <span className="result-score-value result-score-winner">{scores[winner]}</span>
+            </div>
+            <div className="result-score-divider">-</div>
+            <div className="result-score-team">
+              <span className="result-score-value result-score-loser">{scores[loser]}</span>
+              <span className="result-score-name">{teamNames[loser]}</span>
+            </div>
+          </div>
+
+          <div className="result-match-score">
+            Match: {teamNames.teamA} {gameScores.teamA} - {gameScores.teamB} {teamNames.teamB}
+          </div>
+
+          <div className="result-app-watermark">pickle-board</div>
+        </div>
+
+        <div className="result-actions">
+          <button
+            className="btn btn-outline-light result-action-button"
+            onClick={handleSaveResult}
+          >
+            📷 Save / Share
+          </button>
+          <button
+            className="btn btn-success result-action-button result-next-button"
+            onClick={handleNextGame}
+            disabled={isTransitioning}
+          >
+            {isTransitioning ? 'Loading...' : '▶ Next Game'}
+          </button>
+          <button
+            className="btn btn-outline-secondary result-action-button"
+            onClick={handleNewGame}
+          >
+            🔄 New Game
+          </button>
+        </div>
+      </div>
+    );
   };
 
   // --- レンダリング --- 
@@ -378,20 +440,14 @@ function App() {
           </div>
         )}
 
-        {gameState === 'finished' && (
-          <div className="scoreboard-winner-overlay">
-            <h2>{teamNames[winner]} Wins!</h2>
-            <button className="btn btn-success btn-lg mt-3" onClick={startNextGame}>
-              Start Next Game
-            </button>
-          </div>
-        )}
+        {/* 得点盤モードでも結果画面を表示 */}
+        {renderResultScreen()}
       </div>
     );
   };
 
   return (
-    <div className={`App container py-4 ${adsInfo.isNative && displayMode === 'normal' ? 'has-banner' : ''}`}>
+    <div className="App container py-4">
       {displayMode === 'scoreboard' ? (
         renderScoreboardMode()
       ) : (
@@ -428,14 +484,8 @@ function App() {
               )}
             </div>
 
-            {gameState === 'finished' && (
-              <div className="alert alert-success text-center mt-4" role="alert">
-                <h4>{teamNames[winner]} Wins the Game!</h4>
-                <button className="btn btn-success mt-2" onClick={startNextGame}>
-                  Start Next Game
-                </button>
-              </div>
-            )}
+            {/* 結果画面（通常モード） */}
+            {renderResultScreen()}
           </main>
 
           <footer className="text-center mt-4 control-buttons">

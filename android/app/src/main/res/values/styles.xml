@@ -13,6 +13,10 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
+        <!-- ステータスバーの下に WebView を収める（edge-to-edge 対応） -->
+        <item name="android:statusBarColor">#1a1a1a</item>
+        <item name="android:navigationBarColor">#1a1a1a</item>
+        <item name="android:fitsSystemWindows">true</item>
     </style>
 
 

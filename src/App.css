@@ -452,7 +452,186 @@ body {
   margin-right: 10px;
 }
 
-/* --- Android: 画面下部のバナー広告と操作ボタンが重ならないように余白を確保 --- */
-.App.has-banner {
-  padding-bottom: 80px !important;
+/* --- ゲーム結果画面 --- */
+.result-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+  padding-top: calc(20px + env(safe-area-inset-top));
+}
+
+.result-card {
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  border: 2px solid var(--accent-color);
+  border-radius: 20px;
+  padding: 30px 40px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(247, 255, 0, 0.2);
+}
+
+.result-header {
+  margin-bottom: 20px;
+}
+
+.result-title {
+  font-family: 'Anton', sans-serif;
+  font-size: 2rem;
+  color: var(--accent-color);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.result-winner-section {
+  margin: 20px 0;
+}
+
+.result-crown {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.result-winner-name {
+  font-family: 'Anton', sans-serif;
+  font-size: 2.5rem;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.result-winner-label {
+  font-size: 1rem;
+  color: var(--accent-color);
+  letter-spacing: 5px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.result-score-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin: 25px 0;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+}
+
+.result-score-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.result-score-name {
+  font-size: 0.9rem;
+  color: #aaa;
+  font-weight: 600;
+}
+
+.result-score-value {
+  font-family: 'Anton', sans-serif;
+  font-size: 4rem;
+  line-height: 1;
+}
+
+.result-score-winner {
+  color: var(--accent-color);
+}
+
+.result-score-loser {
+  color: #888;
+}
+
+.result-score-divider {
+  font-size: 2.5rem;
+  color: #666;
+  font-weight: bold;
+}
+
+.result-match-score {
+  font-size: 1rem;
+  color: #aaa;
+  margin: 15px 0 10px;
+  font-weight: 600;
+}
+
+.result-app-watermark {
+  font-family: 'Anton', sans-serif;
+  font-size: 0.8rem;
+  color: #444;
+  letter-spacing: 2px;
+  margin-top: 15px;
+}
+
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 25px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.result-action-button {
+  width: 100%;
+  max-width: 300px;
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+.result-next-button {
+  font-size: 1.3rem;
+  padding: 15px 20px;
+}
+
+/* 結果画面レスポンシブ */
+@media (max-height: 600px) {
+  .result-card {
+    padding: 15px 20px;
+  }
+  .result-title {
+    font-size: 1.3rem;
+  }
+  .result-crown {
+    font-size: 2rem;
+  }
+  .result-winner-name {
+    font-size: 1.8rem;
+  }
+  .result-score-value {
+    font-size: 2.5rem;
+  }
+  .result-score-section {
+    margin: 10px 0;
+    padding: 10px;
+  }
+  .result-actions {
+    margin-top: 15px;
+    gap: 8px;
+  }
+  .result-action-button {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
+  .result-next-button {
+    font-size: 1.1rem;
+    padding: 10px 15px;
+  }
 }

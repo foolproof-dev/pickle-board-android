@@ -2,6 +2,11 @@
   padding: 15px;
 }
 
+/* モーダルの上余白：ステータスバーと重ならないようにする */
+.modal-dialog {
+  margin-top: calc(20px + env(safe-area-inset-top)) !important;
+}
+
 .modal-content {
   background-color: var(--card-bg) !important;
   color: var(--text-color) !important;
